@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://i-frush.github.io</id>
     <title>i-frush&apos;s blog</title>
-    <updated>2022-02-16T15:29:58.145Z</updated>
+    <updated>2022-02-17T03:32:20.981Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://i-frush.github.io"/>
     <link rel="self" href="https://i-frush.github.io/atom.xml"/>
@@ -17,7 +17,7 @@
         </link>
         <updated>2022-02-16T14:50:24.000Z</updated>
         <content type="html"><![CDATA[<div align = "center">
-<img src="F:/Blogs/post-images/1645023563857.jpeg" width = "60%" align=center />
+<img src="../../post-images/1645023563857.jpeg" width = "60%" align=center />
 </div>
 <blockquote>
 <p>　　它没有现实那般美丽而惊人，相比而言这只是一个模糊的镜像，而现实，就好像米勒所相信的那样，昭示著冥冥之中有神灵或永恒的存在。那老人安静地坐在火炉旁的角落里，甚至都不一定知道这一切...这不是什么神学——就算是最穷的樵夫或矿工也总有那么一刹那感觉到永恒之门的存在。</p>
