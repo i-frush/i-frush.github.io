@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://i-frush.github.io</id>
     <title>i-frush&apos;s blog</title>
-    <updated>2022-02-17T06:16:28.786Z</updated>
+    <updated>2022-02-17T06:26:13.816Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://i-frush.github.io"/>
     <link rel="self" href="https://i-frush.github.io/atom.xml"/>
@@ -18,9 +18,9 @@
         <content type="html"><![CDATA[<h2 id="b起因b"><b>起因</b></h2>
 <p>起因就是我发现就算我开着代理工具，git依然经常出现timeout以及其它奇奇怪怪的错误。在排除了SSH配置问题后，我觉得可能是我打开的代理工具没有对git产生影响。</p>
 <h2 id="b为什么代理工具没对git起作用b"><b>为什么代理工具没对git起作用？</b></h2>
-<p>由于我的技术水平很低，我还没搞清楚这个，这里大概口胡一下。
-我所使用的代理工具会有一个本地的客户端监听所用应用的网络请求，将请求加密后发送到代理服务器上，代理服务器上的服务端负责解密以及等等之后的事情。
-然后由于某些原因，代理工具并没有收集到git的网络请求，所以需要手动进行git的proxy配置，将请求发送到本机上代理工具监听的端口，实现请求的转发。
+<p>由于我的技术水平很低，我还没搞清楚这个，这里大概口胡一下。</p>
+<p>我所使用的代理工具会有一个本地的客户端监听所用应用的网络请求，将请求加密后发送到代理服务器上，代理服务器上的服务端负责解密以及等等之后的事情。</p>
+<p>然后由于某些原因，代理工具并没有收集到git的网络请求，所以需要手动进行git的proxy配置，将请求发送到本机上代理工具监听的端口，实现请求的转发。
 </p>
 <h2 id="bhttp代理和socks代理b"><b>http代理和socks代理</b></h2>
 <p>不懂</p>
