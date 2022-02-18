@@ -2,13 +2,137 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://i-frush.github.io</id>
     <title>i-frush&apos;s blog</title>
-    <updated>2022-02-17T06:28:48.620Z</updated>
+    <updated>2022-02-18T10:32:15.148Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://i-frush.github.io"/>
     <link rel="self" href="https://i-frush.github.io/atom.xml"/>
     <logo>https://i-frush.github.io/images/avatar.png</logo>
     <icon>https://i-frush.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, i-frush&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[《初等数论》（潘版） 读书笔记]]></title>
+        <id>https://i-frush.github.io/post/lesslesschu-deng-shu-lun-greatergreater-pan-ban-du-shu-bi-ji/</id>
+        <link href="https://i-frush.github.io/post/lesslesschu-deng-shu-lun-greatergreater-pan-ban-du-shu-bi-ji/">
+        </link>
+        <updated>2022-02-18T10:25:22.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="第一章-整除">第一章 整除</h1>
+<h2 id="11-自然数和整数">1.1 自然数和整数</h2>
+<h3 id="定理">定理</h3>
+<p> 
+<b>归纳原理  </b> 基于集合论定义了自然数，是数学归纳法的基础，是数论最基础的公理 
+</p>
+<blockquote>
+<p><b>归纳原理</b><br>
+设S是N的一个子集，满足条件：（i）1∈S；（ii）如果n∈S，则n+1∈S，那么S=<b><i>N</i></b>.<br>
+</br></p>
+</blockquote>
+<p>
+<b>定理1 </b>数学归纳法的基本形式，证明基于归纳原理</br>
+</p>
+<blockquote>
+<p><b>定理1（数学归纳法）</b><br>
+设P（n）是关于自然数n的一种性质或命题.如果（i）当n=1时，P（1）成立；（ii）由P（n）成立必可推出P（n+1）成立，那么P（n）对所有自然数n成立.<br>
+</br></p>
+</blockquote>
+<p>
+<b>定理2 </b>最小自然数原理，证明基于归结定理(证明不唯一)</br>
+</p>
+<blockquote>
+<p><b>定理2（最小自然数原理） </b><br>
+设T是N的一个非空子集.那么，必有t0∈T，使对任意的t∈T有t0≤t，即t0是T中的最小自然数.<br>
+</br></p>
+</blockquote>
+<p>
+<b>定理3 </b>最大自然数原理，证明构造所有满足条件的元素集合，结合最小自然数原理证明最小元素必在M中</br>
+</p>
+<blockquote>
+<p><b>定理3（最大自然数原理） </b><br>
+设M是N的非空子集.若M有上界，即存在a∈N，使对任意的m∈M有m≤a，那么，必有m0∈M，使对任意的m∈M有m≤m0，即m0是M中的最大自然数.<br>
+</br></p>
+</blockquote>
+<p>
+<b>定理4 </b>第二数学归纳法， 证明构造使P不成立的元素集，结合最小自然数原理进行反证
+</p>
+<blockquote>
+<p><b>定理4（第二种数学归纳法） </b><br>
+设P（n）是关于自然数n的一种性质或命题.如果（i）当n=1时，P（1）成立；（ii）对n＞1，若对所有的自然数m＜n，P（m）成立，则必可推出P（n）成立，那么P（n）对所有自然数n成立.<br>
+</br></p>
+</blockquote>
+<p>
+<b>定理5 </b>鸽巢原理，感觉和前几个原理关系不密切，应该也算是集合论相关的
+</p>
+<blockquote>
+<p><b>定理5（鸽巢原理）</b><br>
+（注：亦称为盒子原理或Dirichlet原理.）设n是一个自然数.现有n个盒子和n+1个物体.无论怎样把这n+1个物体放入这n个盒子中，一定有一个盒子中被放了两个或两个以上的物体.<br>
+</br></p>
+</blockquote>
+<h3 id="思考与证明">思考与证明</h3>
+<ul>
+<li><b>最小自然数原理的证明</b></li>
+</ul>
+<p>使用反证法可以将证明等价于其他命题</p>
+<blockquote>
+<p><b>定理2的证明</b><br>
+考虑由所有这样的自然数s组成的集合S：对任意的t∈T必有s≤t.由于1满足这样的条件，所以1∈S，S非空.此外，若t1∈T（因T非空所以必有t1），则t1+1＞t1，<b>所以t1+1∉S.由这两点及归纳原理就推出：必有s0∈S使得s0+1∉S（为什么）</b>.我们来证明必有s0∈T.因若不然，则对任意的t∈T必有t＞s0，因而t≥s0+1.这表明s0+1∈S，矛盾.取t0=s0就证明了定理</p>
+</blockquote>
+<p><b>Q:</b></p>
+<blockquote>
+<p><b>所以t1+1∉S.由这两点及归纳原理就推出：必有s0∈S使得s0+1∉S（为什么）</b></p>
+</blockquote>
+<p><b>A:</b></p>
+<p>由归结定理，即证S≠N（若所有的s0+1∈S，根据归结定理就可以推出S=N)
+由第二点，必有元素t1+1∈S，故S≠N，得证</p>
+</br>
+<ul>
+<li><b>定理2和定理3的等价性</b></li>
+</ul>
+<p><b>A:</b></p>
+<p>书前面已经证明了定理2->定理3. 使用类似的方法可以证定理3->定理2:
+设有自然数集T，由于前面说过≤表示顺序关系，而1不为任何自然数的后继，故对于T中任意元素t，有1≤t.
+考虑由所有满足m≤t的自然数集合M，由前面的分析，M非空.显然任意t都为M的上界，由定理3，M中有最大元素m0.
+假如m0∈T，则对任意的t有m0<t , m0+1≤t，故m0+1∈M，与m0的最大性矛盾.</p>
+</br>
+<ul>
+<li>定理2中没有强调下届，是因为归结定理已经规定了自然数集有下界1. 个人感觉在这里将比较的符号（&gt;,&lt;,≥，≤）感知为元素顺序的标记而非大小更有利于理解.<br>
+</br></li>
+</ul>
+<h3 id="习题选做">习题选做</h3>
+<blockquote>
+<p>1.设k0是给定的整数，P（n）是关于整数n的一种性质或命题.如果（i）当n=k0时，P（k0）成立；（ii）由P（n）成立可推出P（n+1）成立，那么P（n）对所有整数n≥k0成立.</p>
+</blockquote>
+<p><b>思路： </b></br>
+将定理1的作用范围推广到了所有整数(包括负数)，考虑到与定理1相似的地方：给定的n都有一个起始元素. 通过将n所在的集合与自然数集<b><i>N</i></b>建立映射关系来“化未知为已知”</p>
+<p><b>证明： </b></br>
+设对于整数m，构造命题Q(m)=P(m+k0-1).</br>
+则由条件(i):　Q(1)=P(k0)成立.</br>
+由条件(ii):　Q(m)=P(m+k0-1)成立，可推出P(m+k0)=Q(m+1)成立.由定理1，对于所有自然数m ,Q(m)都成立.</br>
+即对于所有n>k0 , P(n)都成立.</br>
+</p>
+</br>
+<blockquote>
+<p>3.设T是一个由整数组成的集合.若T中有正整数，则T中必有最小正整数.</p>
+</blockquote>
+<p><b>思路： </b></br>
+利用集合的关系，做的时候还怕这种思路不够严谨，结果看答案也是这种思路
+</p>
+<p><b>证明：</b></br>
+设T中所有正整数构成的非空集合为S，则正整数集S为N的非空子集，由定理2，S中存在最小正整数.
+由于S为T中所有正整数的集合，故T中存在最小正整数.
+</p>
+</br>
+<blockquote>
+<p>［8.1］在一次竞赛中共出了A，B，C三道试题.已知：</p>
+<p>（i）在所有参赛学生中共有25人每人至少解出了一道题；（ii）在没有解出A题的学生中，解出B题的人数是解出C题的人数的两倍；（iii）在解出A题的学生中，只解出A题的人数比还解出其他题的人数多一个；（iv）在只解出一道题的学生中，有一半人未解出A题.问：有多少学生只解出了B题？</p>
+</blockquote>
+<p><b>思路： </b></br>
+虽然作者放到了1.1的推荐习题里，但我这道题是用整除的性质做的.</br>
+先根据韦恩图设出各未知量，根据题设可列出4个方程.</br>
+设做出B和C题的人数为f，化简方程可得到：3|26-f , 9|26-4f.</br>
+在f≤25时只有一个可能值，带入方程即可解出只做出B的人数.</br>
+</p>
+</br>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[为git设置代理]]></title>
         <id>https://i-frush.github.io/post/wei-git-she-zhi-dai-li/</id>
