@@ -2,13 +2,41 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://i-frush.github.io</id>
     <title>i-frush&apos;s blog</title>
-    <updated>2022-02-21T08:01:02.384Z</updated>
+    <updated>2022-02-21T08:04:22.931Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://i-frush.github.io"/>
     <link rel="self" href="https://i-frush.github.io/atom.xml"/>
     <logo>https://i-frush.github.io/images/avatar.png</logo>
     <icon>https://i-frush.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, i-frush&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[生的技术与死的思想]]></title>
+        <id>https://i-frush.github.io/post/the-live-of-tech/</id>
+        <link href="https://i-frush.github.io/post/the-live-of-tech/">
+        </link>
+        <updated>2022-02-21T08:04:15.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="资料">资料</h2>
+<p> 一些伦理学读物（未读）</br>
+</p>
+<h2 id="思考">思考</h2>
+<h3 id="关于技术的印象">关于技术的印象</h3>
+<p>无关词典里的定义，这里阐述的只是我自己的感觉。</p>
+<p>技术就是完成一件事情的具体方法。 </br>
+技术的目的只有一个，就是完成它的目标，其他衍生出来的种种对于技术来说都是无关紧要的。譬如，你想把一个20kg的物体搬到3楼，只要你通过某种方式完成了这个目标，这种方式就是一种技术；相反，只要你没有完成目标，就算你完成了部分目标或者获得了一些其他的收获，你所用地方式（对于你的目标而言）不是一种技术。</p>
+<p>从这个角度来看，“目标”是技术的核心之一，目标的的选取是十分重要的。</p>
+<p>技术的另一个关键的特征是“具体”。一个技术最好是能够形成描述具体的文档。就算其精妙之处难以用语言来描述，也应该确保同一个人在重复完成同样的目标时他的方式是相同的。也就是说，他在这个过程中可以清晰地意识到自己下一步要进行什么动作，而不是依靠“未知”。</p>
+</br>
+<p>一些技术的例子：<ul>
+<li>如何使用旧电脑搭建一台自己的服务器</li>
+<li>如果在篆刻时刻出竖直的线条</li>
+<li>《刃牙》里面经常把格斗招式称为“技术”而与“力量”相对应</li>
+<li>如何在可接受的时间内求出某一区间里互质对的个数</li>
+<li>如何在聊天出现不和谐的迹象时避免冷场</li>
+<li>游戏里面通过一系列动作而提高自己战胜对手的几率</li>
+</ul></p>
+</br>
+<p>而我对技术有“生”的感觉，应该就是基于这些思考。从目标来看，一个技术的目标可能并不单一，但所有技术的都有有一个共同的目标:技术使用者的生活<font color="b3424a">(驳1 : 紫砂的技术)</font>。从“具体”这一特性来看，技术的使用者会时刻关注技术的种种细节，这会是我想起生活的繁复、多元、不纯净。</p>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[《初等数论》（潘版） 读书笔记]]></title>
         <id>https://i-frush.github.io/post/chu-deng-shu-lun-greatergreater-pan-ban-du-shu-bi-ji/</id>
@@ -203,33 +231,5 @@ git config –global https.proxy https://127.0.0.1:1081
         <link href="https://i-frush.github.io/post/the-death-of-tech/">
         </link>
         <updated>2022-02-16T05:18:44.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[生的技术与死的思想]]></title>
-        <id>https://i-frush.github.io/post/the-live-of-tech/</id>
-        <link href="https://i-frush.github.io/post/the-live-of-tech/">
-        </link>
-        <updated>2022-02-16T04:48:46.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="资料">资料</h2>
-<p> 一些伦理学读物（未读）</br>
-</p>
-<h2 id="思考">思考</h2>
-<h3 id="关于技术的印象">关于技术的印象</h3>
-<p>无关词典里的定义，这里阐述的只是我自己的感觉。</p>
-<p>技术就是完成一件事情的具体方法。 </br>
-技术的目的只有一个，就是完成它的目标，其他衍生出来的种种对于技术来说都是无关紧要的。譬如，你想把一个20kg的物体搬到3楼，只要你通过某种方式完成了这个目标，这种方式就是一种技术；相反，只要你没有完成目标，就算你完成了部分目标或者获得了一些其他的收获，你所用地方式（对于你的目标而言）不是一种技术。</p>
-<p>从这个角度来看，“目标”是技术的核心之一，目标的的选取是十分重要的。</p>
-<p>技术的另一个关键的特征是“具体”。一个技术最好是能够形成描述具体的文档。就算其精妙之处难以用语言来描述，也应该确保同一个人在重复完成同样的目标时他的方式是相同的。也就是说，他在这个过程中可以清晰地意识到自己下一步要进行什么动作，而不是依靠“未知”。</p>
-</br>
-<p>一些技术的例子：<ul>
-<li>如何使用旧电脑搭建一台自己的服务器</li>
-<li>如果在篆刻时刻出竖直的线条</li>
-<li>《刃牙》里面经常把格斗招式称为“技术”而与“力量”相对应</li>
-<li>如何在可接受的时间内求出某一区间里互质对的个数</li>
-<li>如何在聊天出现不和谐的迹象时避免冷场</li>
-<li>游戏里面通过一系列动作而提高自己战胜对手的几率</li>
-</ul></p>
-</br>
-<p>而我对技术有“生”的感觉，应该就是基于这些思考。从目标来看，一个技术的目标可能并不单一，但所有技术的都有有一个共同的目标:技术使用者的生活<font color="b3424a">(驳1 : 紫砂的技术)</font>。从“具体”这一特性来看，技术的使用者会时刻关注技术的种种细节，这会是我想起生活的繁复、多元、不纯净。</p>]]></content>
     </entry>
 </feed>
