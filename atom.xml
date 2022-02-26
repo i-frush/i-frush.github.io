@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://i-frush.github.io</id>
     <title>i-frush&apos;s blog</title>
-    <updated>2022-02-26T13:28:10.122Z</updated>
+    <updated>2022-02-26T13:39:54.315Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://i-frush.github.io"/>
     <link rel="self" href="https://i-frush.github.io/atom.xml"/>
@@ -18,12 +18,12 @@
         <content type="html"><![CDATA[<h2 id="b起因b"><b>起因</b></h2>
 <p>我对shell管道符 | 的认知就是将前一个命令的输出作为后一个命令的待输入参数，于是有:</p>
 <p>查询特定docker容器id的命令：</p>
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot;
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot;
 4fdba602edab
 </code></pre>
  </br>
  <p>查询指定id容器的终端输出的命令：
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker logs 4fdba602edab
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# docker logs 4fdba602edab
 iifrush
 iifrush
 iifrush
@@ -33,7 +33,7 @@ iifrush
 </code></pre>
  </br>
 <p>但是将他们用 | 连接，后面的命令却接收不到参数:</p></p>
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot; | docker logs
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot; | docker logs
 &quot;docker logs&quot; requires exactly 1 argument.
 See 'docker logs --help'.
 </code></pre>
@@ -84,13 +84,13 @@ terminal最初是指terminal device，它是用户交互的硬件设备. 而现�
 <p>A: <p>当然不是的，实际上我们查看这三个文件，会发现它们实际上是<b><em>符号链接</em></b>.</p>
 </li>
 </ul>
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ /]# ls -l /dev/std*
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ /]# ls -l /dev/std*
 lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stderr -&gt; /proc/self/fd/2
 lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stdin -&gt; /proc/self/fd/0
 lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stdout -&gt; /proc/self/fd/1
 </code></pre>
 <p>再进一步的话：</p>
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ /]# ls -l /proc/self/fd/{0,1,2}
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ /]# ls -l /proc/self/fd/{0,1,2}
 lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/0 -&gt; /dev/pts/0
 lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/1 -&gt; /dev/pts/0
 lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/2 -&gt; /dev/pts/0
@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
 <p>现在我们来看bash里面的重定向和管道的功能就很容易理解了 : 这两个功能就是对每个进程都有的stdin, stdout ,stderr这三个符号链接的充分利用 .<br/>
 它通过修改进程的这三个符号链接的指向地址，结合bash的命令解析规则，来进行命令输出和输入的改变   . <br/>
 比如 :
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush&quot; | echo
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush&quot; | echo
 
 </code></pre>
 <p>pipe将第一个echo进程的stdout指向第二个echo进程的stdin，但是echo是从命令行参数获取数据的，所以就算第二个echo进程获取到了stdin的数据也不会输出.<br/><br>
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
 <p>这时候可以通过<code>read</code>将管道中的内容存入变量，再将其作为命令行参数</p>
 </li>
 </ol>
-<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush hello&quot; | { read var1 var2; echo &quot;$var1 $var2&quot;; }
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush hello&quot; | { read var1 var2; echo &quot;$var1 $var2&quot;; }
 iifrush hello
 </code></pre>
 <p>另一种比较常用的做法是使用命令替换，它的原理是bash子进程，这里不展开介绍 :</p>
