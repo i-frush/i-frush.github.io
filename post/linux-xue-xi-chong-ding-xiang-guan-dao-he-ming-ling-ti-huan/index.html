@@ -1,0 +1,348 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>bash学习 : 重定向，管道和命令替换 | i-frush&#39;s blog</title>
+<link rel="shortcut icon" href="https://i-frush.github.io/favicon.ico?v=1645882080861">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://i-frush.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="bash学习 : 重定向，管道和命令替换 | i-frush&#39;s blog - Atom Feed" href="https://i-frush.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="起因
+我对shell管道符 | 的认知就是将前一个命令的输出作为后一个命令的待输入参数，于是有:
+查询特定docker容器id的命令：
+[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://i-frush.github.io">
+  <img class="avatar" src="https://i-frush.github.io/images/avatar.png?v=1645882080861" alt="">
+  </a>
+  <h1 class="site-title">
+    i-frush&#39;s blog
+  </h1>
+  <p class="site-description">
+    
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              bash学习 : 重定向，管道和命令替换
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-02-24
+              </span>
+              <span>
+                10 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://images8.alphacoders.com/567/567574.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="b起因b"><b>起因</b></h2>
+<p>我对shell管道符 | 的认知就是将前一个命令的输出作为后一个命令的待输入参数，于是有:</p>
+<p>查询特定docker容器id的命令：</p>
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot;
+4fdba602edab
+</code></pre>
+ </br>
+ <p>查询指定id容器的终端输出的命令：
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker logs 4fdba602edab
+iifrush
+iifrush
+iifrush
+iifrush
+iifrush
+iifrush
+</code></pre>
+ </br>
+<p>但是将他们用 | 连接，后面的命令却接收不到参数:</p></p>
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# docker ps -aqf &quot;name=iifrush1&quot; | docker logs
+&quot;docker logs&quot; requires exactly 1 argument.
+See 'docker logs --help'.
+</code></pre>
+ </br>
+<p>现在我知道了docker logs命令可以直接以container name作为参数 (<code>docker logs iifrush1</code> ) ，所以上述指令完全没必要使用管道符.</br></p>
+<p>但我想稍微探究一下为什么会出现这种奇妙的错误，以及shell，pipe，stdin到底是什么东西.</p>
+<h2 id="bshell-和-bashb"><b>shell 和 bash</b></h2>
+<p>首先，我们的命令一定是不符合某种<b>*规则*</b>才致使了错误，这种规则是谁规定的规则呢？自然是命令运行的载体的规则，所以我们先来了解一下linux命令运行的载体。</p>
+<p>资料 :</p>
+<p><a href="https://linux.vbird.org/linux_basic/centos7/0320bash.php#bash">鸟哥的linux私房菜 第十章</a></p>
+<p>shell的原意为壳，此处的含义即是kernel的外壳. 它是操作者和linux核心的介面，广义的讲，所有充当这种介面的应用程序都可称为shell，但通常我们只用shell来表示使用<b>命令行</b>界面来进行这种交互的程序.</p>
+<br/>
+<p>linux系统通常有不止一种shell程序(详见/etc/shells中的记录)，而bash(GNU Bourne-Again Shell)是linux预设的shell.以bash作为默认是因为其有许多方便的特性，诸如:
+<ul>
+<li>history命令暂存</li>
+<li>命令补全</li>
+<li>alias命令别名</li>
+<li>支持shell scripts</li>
+<li>job control工作控制</li>
+</ul>
+<p>等等<br/><br>
+我们所讨论的linux命令即是作为bash这个程序的输入来与kernel进行交互的,我们达不到预期是因为不符合bash的规则.</p></p>
+<h2 id="bterminal和stdinouterrb"><b>terminal和stdin/out/err</b></h2>
+<p>资料 :</p>
+<p><a href="https://unix.stackexchange.com/questions/140522/why-do-some-commands-not-read-from-their-standard-input">Why do some commands not read from their standard input?</a><br>
+<a href="https://askubuntu.com/questions/1266163/command-execution-with-arguments-have-no-relation-with-stdin">stdin and command line arguments</a><br>
+<a href="https://superuser.com/questions/880344/what-is-the-difference-between-terminal-and-bash#">What is the difference between terminal and bash? </a></p>
+<p>在了解bash的管道使用规则之前，我们要先了解一些前置知识.</p>
+<h3 id="什么是terminal">什么是terminal</h3>
+<p>有些人会认为terminal就是shell，这种说法是不严谨的. <br/>
+terminal最初是指terminal device，它是用户交互的硬件设备. 而现在的terminal则是指terminal emulator,它是终端设备的一种模拟程序,用作用户和shell的一个交互界面.<br/>
+所以你在使用shell时所直接看到的那个与你交互的界面实际上是terminal程序，它将shell的返回结果展示给你.<br/>
+但terminal确实和shell是形影不离的，所以在某些模糊的描述中他们指代同一种东西.</p>
+<h3 id="stdinstdoutstderr">stdin，stdout，stderr</h3>
+<p>这三个都是标准流的一种. 流实际上是一种数据I/O的模型，它用来描述数据在两个端点间传输的情况. 而stdin，stdout，stderr的两端中，都有一端是与terminal相连的，所以程序就可以借助这三个标准流来（通过terminal）与用户进行交互. <br/>
+但以上只是抽象的概念，更为关键的问题是：它们在linux中是怎么实现的.</p>
+<h3 id="作为文件的std">作为文件的std</h3>
+<p>linux的一个核心设计理念是"Everything is a file."，stdin/out/err在linux中也是以文件的形式进行操作的.<br/>
+更具体地说，它们对应于/dev/std{in,out,err}这三个文件，各个进程使用这三个控制流的时候只要对这三个文件进行读写就行 .<br/>
+等等，这么说的话...
+</p>
+<br/>
+<ul>
+<li>
+<p>Q : <p>难道所有的进程都共用一个stdin/otu/err吗？</p></p>
+</li>
+<li>
+<p>A: <p>当然不是的，实际上我们查看这三个文件，会发现它们实际上是<b><em>符号链接</em></b>.</p>
+</li>
+</ul>
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ /]# ls -l /dev/std*
+lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stderr -&gt; /proc/self/fd/2
+lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stdin -&gt; /proc/self/fd/0
+lrwxrwxrwx 1 root root 15 Feb 24 00:30 /dev/stdout -&gt; /proc/self/fd/1
+</code></pre>
+<p>再进一步的话：</p>
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ /]# ls -l /proc/self/fd/{0,1,2}
+lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/0 -&gt; /dev/pts/0
+lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/1 -&gt; /dev/pts/0
+lrwx------ 1 root root 64 Feb 25 19:38 /proc/self/fd/2 -&gt; /dev/pts/0
+</code></pre>
+<br/>
+这里的pts意指"Pseudo-terminal slave"，<font color="b3424a">至于slave和master(/dev/ptmx)的关系，我还没有搞清楚</font>，但我们可以知道该该文件即与上面提到的terminal emulator交互的接口 .这样我们就搞清楚标准流是怎么与终端产生联系的了.
+<br/>
+至于多个进程使用不同的stdin的精妙之处，则来自于/proc/self这个路径，实际上这个路径也是个link，当不同的进程访问此链接时，就会访问这个进程本身的/proc/pid目录 .而后面的/fd/{0,1,2}中的0，1，2即该进程拥有的stdin/out/err对应的文件描述符 .
+<br/>
+<p>这样在不同进程访问/dev/std*时，实际上就会访问的是自己所拥有的那个标准流文件 .</p>
+</p>
+<h3 id="两种参数获取方式">两种参数获取方式</h3>
+<p>我们现在知道进程可以通过/dev/stdin来与终端进行交互，这样用户就有给命令提供输入数据的方法了.<br/>
+但是，一个程序除了从stdin，还可以从<b>*命令行参数*</b>来获取自己想要的数据，我们以一个C程序为例子对此进行说明 .
+<pre><code class="language-c">#include&lt;stdio.h&gt;
+int main(int argc, char *argv[]) {
+    int tmp;
+    if(argc==2){
+        printf(&quot;Welcome %s\n&quot;, argv[1]);
+        scanf(&quot;%d&quot; ,&amp;tmp);
+        printf(&quot;ifrush -- %d&quot; ,tmp);
+    }
+    else {
+        fprintf(stderr, &quot;Usage : %s &lt;name&gt;\n&quot;, argv[0]);
+        return 1;
+    }
+    return 0;
+}
+</code></pre>
+<p>比如以上程序中的 <code>argv[]</code>即是命令行参数数组，而<code>scanf(&quot;%d&quot; ,&amp;tmp);</code>则会从stdin中获取输入 .<br>
+程序设计者通常根据应用场景来选择不同的方式 ，如果一个命令同时支持两者，一种常见的方式是: 先尝试从参数数组获得数据，如果无法获得，再从stdin获取(这也是后面pipe可以实现的一种条件).</p>
+</p>
+<h3 id="一点引申-linux命令的设计原则">一点引申 : linux命令的设计原则</h3>
+<p>现在我们知道了bash命令支持进程以两种不同的方式获取数据, 但为什么要使用这两种不同的方式呢?
+其中有许多不同的原因，这里介绍一种比较有趣的.<br/>
+在linux设计过程中，有一种程序被称作<b>filter</b>,这些程序不关心输入数据的语义，只关心输入数据的格式 .它们通常从stdin读取数据，将数据进行某种格式转换，再将数据从stdout输出，比如cat，sort，grep等命令 .这些命令往往被使用于pipe .<br/>
+与之相对应的，另一种程序的功能与输入数据的<b>语义</b>密切相关，比如kill，ls，rm，这些命令在设计时往往不支持从stdin获取数据 .<br/>
+以上只是从linux命令的设计规范来进行解释，具体使用哪种方式取决于程序设计人员，所以我们想知道一个命令是否支持stdin进行参数输入的最好的方法是<b>阅读该命令的文档</b> .
+</p>
+<h3 id="一个奇妙的疑问与bash命令解析">一个奇妙的疑问与bash命令解析</h3>
+<p>我在解决这个问题时曾产生过一个奇妙的疑问，现在通过以上的知识就可以进行解答 :<br/>
+<ul>
+<li>
+<p>Q : 等等，刚才说stdin的一端通常是与键盘相连的，那么我们所有的命令参数不都是使用键盘输入的吗? 这样说不是应该所有的指令的参数都是从stdin输入吗?</p>
+</li>
+<li>
+<p>A : 解答这个问题的关键是：所有的进程都有一个属于自己的stdin，而shell也是一个进程，它也有自己的stdin .事实上我们所输入的内容刚开始都输入到了bash的stdin里面 .<br/><br>
+然后bash在根据命令解析的结果运行程序，并将参数或作为命令行参数传递给进程，或直接传送到进程的stdin里面 .<font color="b3424a">这里bash解析的具体过程我还不是很清楚( 源码实在看不懂 )，之后有时间再探究这个问题 .</font><br/></p>
+</li>
+</ul>
+</p>
+<h2 id="b管道重定向b"><b>管道，重定向</b></h2>
+<p>现在我们来看bash里面的重定向和管道的功能就很容易理解了 : 这两个功能就是对每个进程都有的stdin, stdout ,stderr这三个符号链接的充分利用 .<br/>
+它通过修改进程的这三个符号链接的指向地址，结合bash的命令解析规则，来进行命令输出和输入的改变   . <br/>
+比如 :
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush&quot; | echo
+
+</code></pre>
+<p>pipe将第一个echo进程的stdout指向第二个echo进程的stdin，但是echo是从命令行参数获取数据的，所以就算第二个echo进程获取到了stdin的数据也不会输出.<br/><br>
+此外，这种依靠符号链接的重定向方式还会造成一些奇怪的bug，比如 :<br>
+<a href="https://segmentfault.com/a/1190000018650276?utm_source=sf-similar-article">linux重定向标准输入后，再重新打开标准输入为什么会失效？</a></p>
+</p>
+<h2 id="b总结b"><b>总结</b></h2>
+<p>现在我们对于最开始的问题就有比较系统的解决方案 :<br/>
+<ol>
+<li>
+<p>查阅命令文档，通常会说明命令是否使用stdin获取数据<br/>以<code>echo</code>为例, <a href="https://man7.org/linux/man-pages/man1/echo.1p.html">echo 官方文档</a>  中明确说明了echo不支持stdin输入</p>
+</li>
+<li>
+<p>这时候可以通过<code>read</code>将管道中的内容存入变量，再将其作为命令行参数</p>
+</li>
+</ol>
+<pre><code class="language-shell">[root@iZfc383jmumlgoZ ~]# echo &quot;iifrush hello&quot; | { read var1 var2; echo &quot;$var1 $var2&quot;; }
+iifrush hello
+</code></pre>
+<p>另一种比较常用的做法是使用命令替换，它的原理是bash子进程，这里不展开介绍 :</p>
+<pre><code class="language-bash">[root@iZfc383jmumlgoZ ~]# echo $(echo &quot;iifrush hello&quot;)
+iifrush hello
+</code></pre>
+<br/>
+至此，我们的问题有了一个基本的解答，但是还有一些地方不甚明晰，这些地方之后有时间的话在进行学习 .
+</p>
+<p>在查阅资料的过程中，我看到了许多人对这个问题的解答，虽然他们的回答都是<b>*正确的*</b>且有的是优雅的，但是回答的角度不尽相同，我的疑问并没有因此消失. 这也是我们为什么要自己将问题的解答写下来的原因，我们的疑问需要的不仅是一个正确的答案，更应该是一个让我们洞明的答案.<br/></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#b%E8%B5%B7%E5%9B%A0b"><b>起因</b></a></li>
+<li><a href="#bshell-%E5%92%8C-bashb"><b>shell 和 bash</b></a></li>
+<li><a href="#bterminal%E5%92%8Cstdinouterrb"><b>terminal和stdin/out/err</b></a>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFterminal">什么是terminal</a></li>
+<li><a href="#stdinstdoutstderr">stdin，stdout，stderr</a></li>
+<li><a href="#%E4%BD%9C%E4%B8%BA%E6%96%87%E4%BB%B6%E7%9A%84std">作为文件的std</a></li>
+<li><a href="#%E4%B8%A4%E7%A7%8D%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F">两种参数获取方式</a></li>
+<li><a href="#%E4%B8%80%E7%82%B9%E5%BC%95%E7%94%B3-linux%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99">一点引申 : linux命令的设计原则</a></li>
+<li><a href="#%E4%B8%80%E4%B8%AA%E5%A5%87%E5%A6%99%E7%9A%84%E7%96%91%E9%97%AE%E4%B8%8Ebash%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90">一个奇妙的疑问与bash命令解析</a></li>
+</ul>
+</li>
+<li><a href="#b%E7%AE%A1%E9%81%93%E9%87%8D%E5%AE%9A%E5%90%91b"><b>管道，重定向</b></a></li>
+<li><a href="#b%E6%80%BB%E7%BB%93b"><b>总结</b></a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://i-frush.github.io/post/ji-ju/">
+              <h3 class="post-title">
+                集句
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://i-frush.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
